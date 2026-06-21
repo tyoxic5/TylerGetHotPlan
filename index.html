@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tyler's Board — Body & Habit Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ AUTH SCREEN ============ -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <span class="brand-mark">●</span>
+      <span class="brand-name">TYLER'S BOARD</span>
+    </div>
+    <p class="auth-sub">Sign in to sync your data across devices.</p>
+    <div id="cloud-banner" class="cloud-banner" style="display:none;"></div>
+    <div class="form-row">
+      <label>Email<input type="email" id="auth-email" placeholder="you@example.com" autocomplete="username"></label>
+    </div>
+    <div class="form-row">
+      <label>Password<input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></label>
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <button class="btn-primary" id="btn-auth-signin">Sign In</button>
+    <button class="btn-secondary" id="btn-auth-signup">Create Account</button>
+  </div>
+</div>
+
+<div class="app" id="main-app" style="display:none;">
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="brand-mark">●</span>
+      <span class="brand-name">TYLER'S BOARD</span>
+    </div>
+    <div class="topbar-date" id="topbar-date">—</div>
+    <button class="topbar-signout" id="btn-signout" style="display:none;">Sign Out</button>
+  </header>
+
+  <main class="screen-stack">
+
+    <!-- ============ TODAY ============ -->
+    <section class="screen active" id="screen-today" data-screen="today">
+
+      <div class="hero-panel" id="motivation-hero">
+        <button class="hero-edit-btn" id="btn-edit-motivation" title="Manage quotes & photos" aria-label="Manage quotes and photos">⚙</button>
+        <div class="hero-photo-wrap" id="hero-photo-wrap"></div>
+        <div class="streak-badge" id="streak-badge">🔥 0 day streak</div>
+        <p class="hero-quote" id="hero-quote">"Discipline is the bridge between goals and accomplishment."</p>
+      </div>
+
+      <div class="panel-grid">
+
+        <div class="panel fader-panel">
+          <div class="panel-label">CH 01 — CALORIES</div>
+          <div class="fader-row">
+            <div class="fader-track">
+              <div class="fader-fill" id="fader-calories"></div>
+              <div class="fader-cap" id="fader-calories-cap"></div>
+            </div>
+            <div class="fader-readout">
+              <div class="readout-value" id="readout-calories">0</div>
+              <div class="readout-target">/ <span id="target-calories">2000</span> cal</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel fader-panel">
+          <div class="panel-label">CH 02 — WATER</div>
+          <div class="fader-row">
+            <div class="fader-track">
+              <div class="fader-fill accent-teal" id="fader-water"></div>
+              <div class="fader-cap" id="fader-water-cap"></div>
+            </div>
+            <div class="fader-readout">
+              <div class="readout-value" id="readout-water">0</div>
+              <div class="readout-target">/ <span id="target-water">100</span> oz</div>
+            </div>
+          </div>
+          <div class="water-buttons water-buttons-today">
+            <button class="water-btn" data-oz="16">+16oz</button>
+            <button class="water-btn" data-oz="24">+24oz</button>
+            <button class="water-btn" data-oz="32">+32oz</button>
+          </div>
+        </div>
+
+        <div class="panel stat-panel">
+          <div class="panel-label">LAST WEIGH-IN</div>
+          <div class="stat-value-row">
+            <span class="stat-value mono" id="stat-weight">—</span>
+            <span class="stat-unit">lb</span>
+          </div>
+          <div class="stat-sub" id="stat-bf">BF — %</div>
+        </div>
+
+
+        <div class="panel stat-panel">
+          <div class="panel-label">TODAY'S FOCUS</div>
+          <div class="stat-value-row">
+            <span class="stat-value" id="stat-day-focus">—</span>
+          </div>
+          <div class="stat-sub" id="stat-day-sub">Set your training day below</div>
+        </div>
+
+      </div>
+
+      <div class="quick-actions">
+        <button class="qa-btn" data-goto="nutrition">+ Log Meal</button>
+        <button class="qa-btn" data-goto="body">+ Log Weigh-in</button>
+        <button class="qa-btn" data-goto="training">+ Log Workout</button>
+        <button class="qa-btn" data-goto="habits">+ Log Habits</button>
+      </div>
+
+      <div class="panel sync-panel">
+        <div class="panel-label">CLOUD SYNC</div>
+        <div class="sync-status-row">
+          <span id="sync-status-text">Local only</span>
+        </div>
+        <button class="btn-primary" id="btn-end-day">End Day — Sync Everything</button>
+      </div>
+
+    </section>
+
+    <!-- ============ BODY ============ -->
+    <section class="screen" id="screen-body" data-screen="body">
+      <h1 class="screen-title">Body</h1>
+
+      <div class="panel">
+        <div class="panel-label">NEW ENTRY</div>
+        <div class="form-row">
+          <label>Date<input type="date" id="body-date"></label>
+        </div>
+        <div class="form-row two-col">
+          <label>Weight (lb)<input type="number" step="0.1" id="body-weight" placeholder="200.0"></label>
+          <label>Body fat % (optional)<input type="number" step="0.1" id="body-bf" placeholder="29.7"></label>
+        </div>
+        <button class="btn-primary" id="btn-save-body">Save Entry</button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">TREND — LAST 30 ENTRIES</div>
+        <canvas id="chart-body" height="180"></canvas>
+        <div class="chart-legend">
+          <span><i class="dot accent-amber"></i> Weight (lb)</span>
+          <span><i class="dot accent-teal"></i> Body Fat %</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">BODY MEASUREMENTS</div>
+        <div class="measure-grid">
+          <div class="measure-field">
+            <label>Neck (in)</label>
+            <input type="number" step="0.1" id="m-neck" placeholder="0">
+            <p class="measure-hint">Just below the larynx (Adam's apple), tape level and snug.</p>
+          </div>
+          <div class="measure-field">
+            <label>Waist (in)</label>
+            <input type="number" step="0.1" id="m-waist" placeholder="0">
+            <p class="measure-hint">At the navel, end of a normal exhale — not your narrowest point.</p>
+          </div>
+          <div class="measure-field">
+            <label>Chest (in)</label>
+            <input type="number" step="0.1" id="m-chest" placeholder="0">
+            <p class="measure-hint">Tape around the fullest part of your chest, under the arms.</p>
+          </div>
+          <div class="measure-field">
+            <label>Hips (in)</label>
+            <input type="number" step="0.1" id="m-hips" placeholder="0">
+            <p class="measure-hint">Around the widest point of your glutes.</p>
+          </div>
+          <div class="measure-field">
+            <label>Bicep — R (in)</label>
+            <input type="number" step="0.1" id="m-bicep" placeholder="0">
+            <p class="measure-hint">Flexed, at the peak of the muscle.</p>
+          </div>
+          <div class="measure-field">
+            <label>Thigh — R (in)</label>
+            <input type="number" step="0.1" id="m-thigh" placeholder="0">
+            <p class="measure-hint">Standing, around the fullest part of the thigh.</p>
+          </div>
+        </div>
+        <button class="btn-primary" id="btn-save-measure">Save Measurements</button>
+        <div class="log-list" id="measure-log-list" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">LOG</div>
+        <div class="log-list" id="body-log-list"></div>
+      </div>
+    </section>
+
+    <!-- ============ NUTRITION ============ -->
+    <section class="screen" id="screen-nutrition" data-screen="nutrition">
+      <h1 class="screen-title">Nutrition</h1>
+
+      <div class="panel">
+        <div class="panel-label">QUICK ADD — FROM THE PLAN</div>
+        <div class="quickadd-grid">
+          <button class="quickadd-btn" data-meal="A">Black Bean Bowl<br><span class="qa-sub">730 cal · 70p</span></button>
+          <button class="quickadd-btn" data-meal="B">Lemon Broccoli Chicken<br><span class="qa-sub">700 cal · 70p</span></button>
+          <button class="quickadd-btn" data-meal="S">Daily Smoothie<br><span class="qa-sub">470 cal · 35p</span></button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">SWEET TOOTH FIXES</div>
+        <div class="snack-sidebar">
+          <div class="snack-item">
+            <span class="snack-name">Frozen Banana "Nice Cream"</span>
+            <span class="snack-detail">Blend 1 frozen banana + splash almond milk + cinnamon. ~110 cal.</span>
+          </div>
+          <div class="snack-item">
+            <span class="snack-name">Greek Yogurt + Honey</span>
+            <span class="snack-detail">Plain yogurt, small honey drizzle, cinnamon. ~150 cal.</span>
+          </div>
+          <div class="snack-item">
+            <span class="snack-name">Dark Chocolate (70%+)</span>
+            <span class="snack-detail">1-2 squares, deliberate portion. ~50-70 cal.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">RECIPES</div>
+        <div class="recipe-block">
+          <div class="recipe-title">Base — Bulk Shredded Chicken</div>
+          <p class="recipe-text"><strong>Ingredients:</strong> 3-3.5 lbs boneless chicken breast, 1 cup chicken broth, 1 tsp garlic powder, 1 tsp onion powder, salt & pepper.</p>
+          <p class="recipe-text"><strong>Method:</strong> Slow cooker, low 6-7 hrs or high 3-4 hrs. Shred with two forks right in the pot. Makes ~10 servings — this is the base for both meals below.</p>
+        </div>
+        <div class="recipe-block">
+          <div class="recipe-title">Black Bean Bowl (Meal A)</div>
+          <p class="recipe-text"><strong>Per batch (5):</strong> 5 portions bulk chicken (6oz), 1 cup salsa, 2.5 cups dry rice, 15oz can black beans.</p>
+          <p class="recipe-text"><strong>Method:</strong> Warm chicken with a few spoonfuls of salsa until coated. Serve over rice with black beans.</p>
+        </div>
+        <div class="recipe-block">
+          <div class="recipe-title">Lemon Broccoli Chicken (Meal B)</div>
+          <p class="recipe-text"><strong>Per batch (5):</strong> 5 portions bulk chicken (7oz), juice of 2-3 lemons, 2 cloves garlic, 1 tbsp olive oil, 1.5 lbs broccoli, 2.5 cups dry rice.</p>
+          <p class="recipe-text"><strong>Method:</strong> Warm chicken with lemon juice, garlic, and olive oil. Steam broccoli. Serve together over rice.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">CUSTOM ENTRY</div>
+        <div class="form-row">
+          <label>Description<input type="text" id="nut-desc" placeholder="e.g. Snack — Greek yogurt"></label>
+        </div>
+        <div class="form-row four-col">
+          <label>Cal<input type="number" id="nut-cal" placeholder="0"></label>
+          <label>Protein (g)<input type="number" id="nut-protein" placeholder="0"></label>
+          <label>Fat (g)<input type="number" id="nut-fat" placeholder="0"></label>
+          <label>Carbs (g)<input type="number" id="nut-carbs" placeholder="0"></label>
+        </div>
+        <button class="btn-primary" id="btn-save-nutrition">Add Entry</button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">TODAY'S PROGRESS</div>
+        <div class="macro-fader-grid">
+          <div class="macro-fader">
+            <div class="fader-track vertical"><div class="fader-fill vertical" id="fader-cal-v"></div></div>
+            <div class="macro-fader-label">Cal</div>
+            <div class="macro-fader-value mono" id="mf-cal">0/2000</div>
+          </div>
+          <div class="macro-fader">
+            <div class="fader-track vertical"><div class="fader-fill vertical accent-amber" id="fader-protein-v"></div></div>
+            <div class="macro-fader-label">Protein</div>
+            <div class="macro-fader-value mono" id="mf-protein">0/190</div>
+          </div>
+          <div class="macro-fader">
+            <div class="fader-track vertical"><div class="fader-fill vertical accent-rose" id="fader-fat-v"></div></div>
+            <div class="macro-fader-label">Fat</div>
+            <div class="macro-fader-value mono" id="mf-fat">0/60</div>
+          </div>
+          <div class="macro-fader">
+            <div class="fader-track vertical"><div class="fader-fill vertical accent-teal" id="fader-carbs-v"></div></div>
+            <div class="macro-fader-label">Carbs</div>
+            <div class="macro-fader-value mono" id="mf-carbs">0/175</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">TODAY'S LOG</div>
+        <div class="log-list" id="nutrition-log-list"></div>
+      </div>
+    </section>
+
+    <!-- ============ TRAINING ============ -->
+    <section class="screen" id="screen-training" data-screen="training">
+      <h1 class="screen-title">Training</h1>
+
+      <div class="panel">
+        <div class="panel-label">SESSION</div>
+        <div class="form-row two-col">
+          <label>Date<input type="date" id="train-date"></label>
+          <label>Day Type
+            <select id="train-daytype">
+              <option value="upper">Upper Body</option>
+              <option value="lower">Lower Body</option>
+              <option value="full">Full Body</option>
+              <option value="home">Home Workout</option>
+              <option value="rest">Rest / Stretch</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">PACING STOPWATCH</div>
+        <div class="timer-display mono" id="stopwatch-display">00:00</div>
+        <div class="timer-controls">
+          <button class="btn-primary" id="btn-stopwatch-start">Start</button>
+          <button class="btn-secondary" id="btn-stopwatch-reset">Reset</button>
+        </div>
+      </div>
+
+      <div class="panel" id="exercise-panel">
+        <div class="panel-label">EXERCISES</div>
+        <div id="exercise-list"></div>
+      </div>
+
+      <button class="btn-primary" id="btn-save-training">Log Workout</button>
+
+      <div class="panel">
+        <div class="panel-label">RECENT SESSIONS</div>
+        <div class="log-list" id="training-log-list"></div>
+      </div>
+    </section>
+
+    <!-- ============ HABITS ============ -->
+    <section class="screen" id="screen-habits" data-screen="habits">
+      <h1 class="screen-title">Habits</h1>
+
+      <div class="panel fader-panel">
+        <div class="panel-label">WATER INTAKE</div>
+        <div class="fader-row">
+          <div class="fader-track">
+            <div class="fader-fill accent-teal" id="fader-water-2"></div>
+          </div>
+          <div class="fader-readout">
+            <div class="readout-value mono" id="readout-water-2">0</div>
+            <div class="readout-target">/ <span id="target-water-2">100</span> oz</div>
+          </div>
+        </div>
+        <div class="water-buttons">
+          <button class="water-btn" data-oz="16">+16oz</button>
+          <button class="water-btn" data-oz="24">+24oz</button>
+          <button class="water-btn" data-oz="32">+32oz</button>
+          <button class="water-btn reset" id="btn-water-reset">Reset Day</button>
+        </div>
+        <div class="form-row">
+          <label>Daily Goal (oz)<input type="number" id="water-goal" placeholder="100"></label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">SKINCARE — AM</div>
+        <div class="checklist" id="skincare-am"></div>
+        <div class="panel-label" style="margin-top:16px;">SKINCARE — PM</div>
+        <div class="checklist" id="skincare-pm"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">MEDITATION</div>
+        <div class="timer-display mono" id="timer-display">05:00</div>
+        <div class="timer-presets">
+          <button class="preset-btn" data-min="5">5 min</button>
+          <button class="preset-btn" data-min="10">10 min</button>
+          <button class="preset-btn" data-min="15">15 min</button>
+        </div>
+        <div class="timer-controls">
+          <button class="btn-primary" id="btn-timer-start">Start</button>
+          <button class="btn-secondary" id="btn-timer-reset">Reset</button>
+        </div>
+        <div class="log-list" id="meditation-log-list"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">JOURNAL</div>
+        <textarea id="journal-text" rows="5" placeholder="What's on your mind today?"></textarea>
+        <button class="btn-primary" id="btn-save-journal">Save Entry</button>
+        <div class="log-list" id="journal-log-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="tabbar">
+    <button class="tab-btn active" data-tab="today"><span class="tab-icon">◉</span>Today</button>
+    <button class="tab-btn" data-tab="body"><span class="tab-icon">▤</span>Body</button>
+    <button class="tab-btn" data-tab="nutrition"><span class="tab-icon">▥</span>Food</button>
+    <button class="tab-btn" data-tab="training"><span class="tab-icon">▲</span>Train</button>
+    <button class="tab-btn" data-tab="habits"><span class="tab-icon">✦</span>Habits</button>
+  </nav>
+
+</div>
+
+<!-- Motivation manager modal -->
+<div class="modal-overlay" id="modal-motivation">
+  <div class="modal">
+    <div class="modal-header">
+      <span>Manage Quotes & Photos</span>
+      <button class="modal-close" id="modal-motivation-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="panel-label">ADD QUOTE</div>
+      <div class="form-row">
+        <input type="text" id="new-quote-text" placeholder="Type a quote...">
+      </div>
+      <button class="btn-secondary" id="btn-add-quote">Add Quote</button>
+      <div class="log-list" id="quote-manage-list" style="margin-top:12px;"></div>
+
+      <div class="panel-label" style="margin-top:20px;">ADD PHOTO</div>
+      <input type="file" id="photo-upload" accept="image/*">
+      <div class="photo-thumb-grid" id="photo-manage-list"></div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script type="module" src="firebase-init.js"></script>
+</body>
+</html>
