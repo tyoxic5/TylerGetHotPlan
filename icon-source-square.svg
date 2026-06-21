@@ -1,0 +1,12 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="512" height="512" fill="#36393b"/>
+
+  <!-- One continuous shape: left leg + bottom curve in pink (reads as L),
+       right leg in orange, the whole thing reading as U -->
+  <path d="M170,148 L170,310 A86,86 0 0 0 342,310"
+        fill="none" stroke="#ff007f" stroke-width="84"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M342,310 L342,148"
+        fill="none" stroke="#ff7d00" stroke-width="84"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

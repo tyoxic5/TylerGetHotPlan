@@ -54,11 +54,13 @@ Motivational photos stay local-only — they're not pushed to Firestore. Firesto
 
 The site is set up as a proper installable web app — icon, branded name, and fullscreen display, no browser bar.
 
-**iPhone (Safari):**
-1. Open your Pages URL in Safari (must be Safari, not Chrome — iOS only allows installs from Safari)
+**iPhone (Safari) — this MUST be done from the Safari app specifically:**
+1. Open your Pages URL in **Safari** — not Chrome, not any other browser
 2. Tap the **Share** icon (square with an arrow)
 3. Scroll down, tap **Add to Home Screen**
 4. Tap **Add**
+
+Why Safari specifically: every browser on iOS (including Chrome) is required by Apple to run on Safari's underlying engine, but Apple only gives the full "Add to Home Screen" treatment — reading your icon files, the manifest, launching fullscreen — to Safari itself. Chrome's "Add to Home Screen" on iPhone just creates a plain bookmark; it won't pick up the icon or the fullscreen behavior at all. If you've already added it from Chrome, delete that shortcut and re-add from Safari.
 
 Note on iOS specifically: Apple doesn't give web apps a way to hide the status bar entirely the way a native app can, so you'll still see the clock/battery up top even though the browser bar is gone. That's an iOS limitation, not a bug — it's the closest thing to fullscreen Safari allows for web apps.
 
@@ -72,9 +74,19 @@ Android fully honors fullscreen mode — the status bar hides too, true edge-to-
 
 Either way, it'll sit on your home screen with its own icon and "Level Up" name, and open without any browser UI.
 
+### Optimized for iPhone 16 Pro Max (and any notch/Dynamic Island device)
+
+Rather than hardcoding pixel values for one specific phone, the layout uses iOS's `env(safe-area-inset-*)` CSS variables — these are populated automatically by the OS with the exact clearance needed around the Dynamic Island and the home indicator, for whatever device it's running on. That means it's correctly laid out for the 16 Pro Max specifically without needing 16-Pro-Max-specific code, and it'll stay correct on whatever iPhone you have next, too.
+
+The apple-touch-icon is a plain full-bleed square with no rounded corners baked in — that's intentional and matches Apple's own guidance. iOS applies its own corner mask to home screen icons; feeding it an icon you've already rounded yourself can create faint double-edges. The Android manifest icons keep their rounded corners, since Android's install flow handles that differently.
+
 ## Editing the icon
 
-The source file is `icons/icon-source.svg` — open it in any text editor or vector tool (Figma, Illustrator) to tweak colors/shapes. After editing, you'll need to re-export PNGs at these sizes and replace the matching files in `icons/`: 512, 192, 180, 167, 152, 120, 32, 16 (all square). Any image editor or an online SVG-to-PNG converter can do this.
+There are two source files in `icons/`:
+- `icon-source.svg` — rounded corners, used to generate the Android/manifest icons (`icon-192.png`, `icon-512.png`)
+- `icon-source-square.svg` — full-bleed square, used to generate the `apple-touch-icon-*.png` files
+
+Both contain the same glyph — only the background shape differs. If you tweak the design, edit the glyph identically in both files, then re-export PNGs at these sizes: 512, 192 (from the rounded version) and 180, 167, 152, 120 (from the square version), plus 32, 16 favicons (either works). Any image editor or online SVG-to-PNG converter can do this.
 
 ## Deploying to GitHub Pages
 

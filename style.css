@@ -78,7 +78,7 @@ input::placeholder, textarea::placeholder {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 18px 14px;
+  padding: calc(16px + env(safe-area-inset-top)) 18px 14px;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -100,7 +100,7 @@ input::placeholder, textarea::placeholder {
   color: var(--text-muted);
 }
 
-.screen-stack { flex: 1; padding: 16px 16px 100px; }
+.screen-stack { flex: 1; padding: 16px 16px calc(100px + env(safe-area-inset-bottom)); }
 .screen { display: none; }
 .screen.active { display: block; animation: fadeIn 0.18s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -486,7 +486,7 @@ textarea { resize: vertical; margin-bottom: 10px; font-family: var(--font-body);
   z-index: 100;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
 }
 .modal-overlay.active { display: flex; }
 .modal {
@@ -570,7 +570,7 @@ textarea { resize: vertical; margin-bottom: 10px; font-family: var(--font-body);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
   z-index: 200;
 }
 .auth-card {
