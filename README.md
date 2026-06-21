@@ -1,33 +1,89 @@
-# Tyler's Board
+# Level Up
 
-A personal body & habit tracker — weight, body fat %, calories/macros, exercise logging, water intake, skincare, journaling, and meditation, plus a motivational quote/photo banner. Built as a plain static site (no build step) so it deploys straight to GitHub Pages.
+A personal body & habit tracker — weight, body fat %, calories/macros, exercise logging, water intake, skincare, journaling, and meditation, plus a motivational quote/photo banner. Hosted as a static site on GitHub Pages, with Firebase handling auth + cloud backup.
 
-## What it tracks
+## How data flows
 
-- **Today** — dashboard with a motivational quote/photo banner, today's calorie and water progress, last weigh-in, and today's training focus
-- **Body** — weight + body fat % log with a trend chart
-- **Food** — quick-add buttons for Meal A / Meal B / the daily smoothie (pre-loaded from your meal plan macros), plus custom entries, with live macro progress
-- **Train** — pre-loaded exercise lists for Upper / Lower / Full Body days, with sets/reps/weight logging and a "last session" reference for progressive overload
-- **Habits** — water intake counter, AM/PM skincare checklist, a meditation timer + log, and a journal
+- Every action (logging a meal, checking off skincare, etc.) saves **instantly to your browser's localStorage** — fast, works offline, no network dependency.
+- **"Log Workout"** additionally pushes that session to the cloud right away.
+- **"End Day"** pushes everything else (nutrition, water, skincare, meditation, journal, weigh-ins) to the cloud in one shot.
+- On sign-in (any device, any browser), the app pulls your latest cloud data down and rebuilds local state from it.
 
-## How data is stored
+This means: if you clear your browser, switch devices, or your phone updates and wipes app data, your history survives — as long as you've hit "End Day" since your last meaningful update. If you forget, the worst case is losing whatever's only-local since the last sync — never everything.
 
-Everything is saved in your browser's `localStorage` — there's no server or account. That means:
-- Your data stays on whatever device/browser you use the app on (it won't sync between your phone and laptop automatically)
-- Clearing your browser data/cache will erase it, so don't do that without exporting first if this matters to you
-- Photos are automatically resized/compressed on upload to keep storage usage low, but avoid uploading dozens of large images
+**Until you set up Firebase (see below), the app runs in local-only mode automatically** — fully functional, just without cloud backup. Nothing breaks if you skip this section for now.
 
-If you want cross-device sync later (similar to what you set up for the iHotel conference room app with Firebase), that's a reasonable next step — just say so and we can wire it in.
+## Setting up Firebase (one-time, ~10 minutes)
+
+1. Go to [console.firebase.google.com](https://console.firebase.google.com) and create a new project (free "Spark" plan — no credit card required, and this plan literally cannot incur charges).
+2. In the project, go to **Build → Authentication**. Click **Get Started**, then enable the **Email/Password** sign-in method.
+3. Go to **Build → Firestore Database**. Click **Create Database**, choose a region close to you, and start in **production mode**.
+4. Once created, go to the **Rules** tab and replace the default rules with:
+
+   ```
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /users/{userId}/data/{document=**} {
+         allow read, write: if request.auth != null && request.auth.uid == userId;
+       }
+     }
+   }
+   ```
+
+   This locks the database down so you can only ever read or write your own data — nobody else's, not even with a stolen API key (see "Is this actually secure?" below).
+
+5. Go to **Project Settings** (gear icon, top left) → scroll to **Your apps** → click the **Web** icon (`</>`) → register an app (any nickname is fine, you don't need Firebase Hosting).
+6. Firebase will show you a config object. Copy those six values into `firebase-config.js` in this project, replacing the placeholders.
+7. Push the updated files to your GitHub repo. Reload your Pages site — you should see a sign-in screen. Use **Create Account** once with your own email/password, and you're set.
+
+## Is this actually secure?
+
+The values in `firebase-config.js` are **not secret** — they're meant to be public, and Firebase is designed around that. The actual security comes from two things working together:
+
+- **Authentication** — only someone who knows your email/password can sign in at all.
+- **Firestore Security Rules** (step 4 above) — even a signed-in, authenticated request can only touch the document at `users/{their-own-uid}/...`. There's no way to read or write anyone else's data, regardless of what's visible in the page source.
+
+This is the standard pattern for static-site-plus-database apps — it's not a workaround, it's how Firebase is meant to be used.
+
+## What doesn't sync (by design, for now)
+
+Motivational photos stay local-only — they're not pushed to Firestore. Firestore documents cap out at 1 MiB, and even a few compressed photos would eat into that fast. If you want photos to follow you across devices too, that's a small additional piece (Firebase Storage) — just ask if you want it added.
+
+## Installing as a fullscreen app on your phone
+
+The site is set up as a proper installable web app — icon, branded name, and fullscreen display, no browser bar.
+
+**iPhone (Safari):**
+1. Open your Pages URL in Safari (must be Safari, not Chrome — iOS only allows installs from Safari)
+2. Tap the **Share** icon (square with an arrow)
+3. Scroll down, tap **Add to Home Screen**
+4. Tap **Add**
+
+Note on iOS specifically: Apple doesn't give web apps a way to hide the status bar entirely the way a native app can, so you'll still see the clock/battery up top even though the browser bar is gone. That's an iOS limitation, not a bug — it's the closest thing to fullscreen Safari allows for web apps.
+
+**Android (Chrome):**
+1. Open your Pages URL in Chrome
+2. Tap the **⋮** menu (top right)
+3. Tap **Add to Home screen** (or you may see an **Install app** banner automatically — tap that instead if it shows up)
+4. Tap **Install**
+
+Android fully honors fullscreen mode — the status bar hides too, true edge-to-edge.
+
+Either way, it'll sit on your home screen with its own icon and "Level Up" name, and open without any browser UI.
+
+## Editing the icon
+
+The source file is `icons/icon-source.svg` — open it in any text editor or vector tool (Figma, Illustrator) to tweak colors/shapes. After editing, you'll need to re-export PNGs at these sizes and replace the matching files in `icons/`: 512, 192, 180, 167, 152, 120, 32, 16 (all square). Any image editor or an online SVG-to-PNG converter can do this.
 
 ## Deploying to GitHub Pages
 
-1. Create a new GitHub repository (public or private both work for Pages on a personal account)
-2. Add these three files to the repo root: `index.html`, `style.css`, `app.js`
+1. Create a GitHub repository (public — required for Pages on a free account)
+2. Add all the files and folders in this directory to the repo root: `index.html`, `style.css`, `app.js`, `firebase-config.js`, `firebase-init.js`, `manifest.json`, and the entire `icons/` folder
 3. Commit and push
 4. In the repo, go to **Settings → Pages**
-5. Under **Build and deployment**, set **Source** to "Deploy from a branch"
-6. Choose the **main** branch and the **/ (root)** folder, then **Save**
-7. GitHub gives you a URL like `https://yourusername.github.io/repo-name/` — that's your live app, usually live within a minute or two
+5. Under **Build and deployment**, set **Source** to "Deploy from a branch", choose **main** and **/ (root)**, then **Save**
+6. Your site goes live at `https://yourusername.github.io/repo-name/`, usually within a minute or two
 
 ## Editing the plan data
 
