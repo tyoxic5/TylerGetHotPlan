@@ -447,7 +447,10 @@ document.getElementById('btn-save-training').addEventListener('click', () => {
   all[date] = { dayType, exercises };
   set('tpw_training', all);
   renderTrainingLog();
-  alert('Session saved.');
+  if (window.cloudSync && window.cloudSync.ready) {
+    window.cloudSync.syncTraining(date, all[date]);
+  }
+  alert('Workout logged.');
 });
 
 function renderTrainingLog() {
@@ -768,7 +771,48 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// ---------- END DAY (full sync) ----------
+
+const ALL_KEYS = [
+  'tpw_body', 'tpw_nutrition', 'tpw_training', 'tpw_water', 'tpw_water_goal',
+  'tpw_skincare', 'tpw_meditation', 'tpw_journal', 'tpw_quotes'
+];
+
+function gatherFullState() {
+  const state = {};
+  ALL_KEYS.forEach(key => { state[key] = get(key, null); });
+  return state;
+}
+
+function applyFullState(cloudState) {
+  if (!cloudState) return;
+  ALL_KEYS.forEach(key => {
+    if (cloudState[key] !== undefined && cloudState[key] !== null) {
+      set(key, cloudState[key]);
+    }
+  });
+  renderToday();
+}
+
+document.getElementById('btn-end-day').addEventListener('click', () => {
+  const state = gatherFullState();
+  if (window.cloudSync && window.cloudSync.ready) {
+    window.cloudSync.syncAll(state);
+  } else {
+    alert('Cloud sync isn\u2019t set up yet \u2014 your data is still safe locally. See README.md to enable cloud backup.');
+  }
+});
+
 // ---------- INIT ----------
 
-updateTimerDisplay();
-renderToday();
+function initApp() {
+  updateTimerDisplay();
+  renderToday();
+}
+
+// Exposed for firebase-init.js (a module, so it can't see this
+// script's top-level scope directly) to call into.
+window.TPW = {
+  get, set, todayStr, DEFAULT_QUOTES,
+  initApp, gatherFullState, applyFullState,
+};

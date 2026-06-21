@@ -495,6 +495,60 @@ textarea { resize: vertical; margin-bottom: 10px; font-family: var(--font-body);
 .dot.accent-amber { background: var(--accent-amber); }
 .dot.accent-teal { background: var(--accent-teal); }
 
+/* ============ AUTH SCREEN ============ */
+
+.auth-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 200;
+}
+.auth-card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+}
+.auth-brand { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.auth-sub { color: var(--text-muted); font-size: 13px; margin: 0 0 18px; }
+.auth-error { color: var(--danger); font-size: 12px; min-height: 16px; margin-bottom: 8px; }
+.cloud-banner {
+  background: var(--accent-amber-dim);
+  color: var(--accent-amber);
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.topbar-signout {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  margin-left: 8px;
+}
+
+/* ============ SYNC PANEL ============ */
+
+.sync-panel { margin-top: 14px; }
+.sync-status-row {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.sync-status-row.synced { color: var(--success); }
+.sync-status-row.unsynced { color: var(--accent-amber); }
+
 /* ============ RESPONSIVE ============ */
 
 @media (min-width: 600px) {
