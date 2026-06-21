@@ -11,28 +11,7 @@
 </head>
 <body>
 
-<!-- ============ AUTH SCREEN ============ -->
-<div class="auth-screen" id="auth-screen">
-  <div class="auth-card">
-    <div class="auth-brand">
-      <span class="brand-mark">●</span>
-      <span class="brand-name">TYLER'S BOARD</span>
-    </div>
-    <p class="auth-sub">Sign in to sync your data across devices.</p>
-    <div id="cloud-banner" class="cloud-banner" style="display:none;"></div>
-    <div class="form-row">
-      <label>Email<input type="email" id="auth-email" placeholder="you@example.com" autocomplete="username"></label>
-    </div>
-    <div class="form-row">
-      <label>Password<input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></label>
-    </div>
-    <div class="auth-error" id="auth-error"></div>
-    <button class="btn-primary" id="btn-auth-signin">Sign In</button>
-    <button class="btn-secondary" id="btn-auth-signup">Create Account</button>
-  </div>
-</div>
-
-<div class="app" id="main-app" style="display:none;">
+<div class="app">
 
   <header class="topbar">
     <div class="topbar-brand">
@@ -40,7 +19,6 @@
       <span class="brand-name">TYLER'S BOARD</span>
     </div>
     <div class="topbar-date" id="topbar-date">—</div>
-    <button class="topbar-signout" id="btn-signout" style="display:none;">Sign Out</button>
   </header>
 
   <main class="screen-stack">
@@ -108,14 +86,6 @@
         <button class="qa-btn" data-goto="body">+ Log Weigh-in</button>
         <button class="qa-btn" data-goto="training">+ Log Workout</button>
         <button class="qa-btn" data-goto="habits">+ Log Habits</button>
-      </div>
-
-      <div class="panel sync-panel">
-        <div class="panel-label">CLOUD SYNC</div>
-        <div class="sync-status-row">
-          <span id="sync-status-text">Local only</span>
-        </div>
-        <button class="btn-primary" id="btn-end-day">End Day — Sync Everything</button>
       </div>
 
     </section>
@@ -234,7 +204,7 @@
         <div id="exercise-list"></div>
       </div>
 
-      <button class="btn-primary" id="btn-save-training">Log Workout</button>
+      <button class="btn-primary" id="btn-save-training">Save Session</button>
 
       <div class="panel">
         <div class="panel-label">RECENT SESSIONS</div>
@@ -333,6 +303,5 @@
 </div>
 
 <script src="app.js"></script>
-<script type="module" src="firebase-init.js"></script>
 </body>
 </html>
