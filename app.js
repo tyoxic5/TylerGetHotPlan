@@ -79,12 +79,14 @@ const DAY_EXERCISES = {
     { name: 'Dumbbell Curl', sets: 3, type: 'weight' },
     { name: 'Dumbbell Fly', sets: 3, type: 'weight' },
     { name: 'Plank', sets: 3, type: 'time' },
+    { name: '90/90 Diaphragmatic Breathing', sets: 1, type: 'info' },
   ],
   lower: [
     { name: 'Barbell Back Squat', sets: 4, type: 'weight' },
     { name: 'Walking Lunges', sets: 3, type: 'weight' },
     { name: 'Standing Calf Raise', sets: 3, type: 'weight' },
     { name: 'Plank', sets: 3, type: 'time' },
+    { name: '90/90 Diaphragmatic Breathing', sets: 1, type: 'info' },
   ],
   full: [
     { name: 'Conventional Deadlift', sets: 3, type: 'weight' },
@@ -92,6 +94,8 @@ const DAY_EXERCISES = {
     { name: 'Seated Cable Row', sets: 3, type: 'weight' },
     { name: 'Band Face Pull', sets: 3, type: 'weight' },
     { name: 'Plank', sets: 3, type: 'time' },
+    { name: 'Thoracic Open Book Stretch', sets: 1, type: 'info' },
+    { name: '90/90 Diaphragmatic Breathing', sets: 1, type: 'info' },
   ],
   home: [
     { name: 'Dumbbell Bench Press', sets: 3, type: 'weight' },
@@ -100,6 +104,7 @@ const DAY_EXERCISES = {
     { name: 'Dumbbell Romanian Deadlift', sets: 3, type: 'weight' },
     { name: 'Band Row', sets: 3, type: 'weight' },
     { name: 'Plank', sets: 3, type: 'time' },
+    { name: '90/90 Diaphragmatic Breathing', sets: 1, type: 'info' },
   ],
   rest: [],
 };
@@ -113,7 +118,9 @@ const EXERCISE_INFO = {
   'Lat Pulldown': { desc: 'Seated at the cable, pull the bar to your upper chest, leading with your elbows.', stretch: { name: 'Cross-Body Lat Stretch', desc: 'Pull one straight arm across your chest with the opposite hand.' } },
   'Dumbbell Curl': { desc: 'Standing, curl dumbbells up to your shoulders, elbows pinned to your sides.', stretch: { name: 'Forearm Flexor Stretch', desc: 'Arm out, palm up, gently pull fingers back with the other hand.' } },
   'Dumbbell Fly': { desc: 'On a bench, arms slightly bent, lower dumbbells out to the sides in an arc, bring back together.', stretch: { name: 'Doorway Pec Stretch', desc: 'Forearm on a doorframe at shoulder height, step through to stretch the chest.' } },
-  'Plank': { desc: 'Forearms down, body in a straight line head to heels. Exhale fully on each breath.', stretch: { name: '\u2014', desc: 'Core/breath work \u2014 no counterbalance stretch needed.' } },
+  'Plank': { desc: 'Forearms down, body in a straight line head to heels. Exhale fully on each breath \u2014 this is the core stability that anchors good breath support for both singing and horn.', stretch: { name: '\u2014', desc: 'Core/breath work \u2014 no counterbalance stretch needed.' } },
+  '90/90 Diaphragmatic Breathing': { desc: 'Lie on your back, legs up on a box or chair (hips and knees at 90°). Breathe deep into your belly and ribs, expanding 360° around your torso, not just your chest. 3-5 min. This is direct training for the breath capacity and control both singing and horn playing depend on.', stretch: { name: '\u2014', desc: 'A breath drill, not a lift \u2014 no logging needed, just do it.' } },
+  'Thoracic Open Book Stretch': { desc: 'Lying on your side, knees bent, sweep your top arm open across your body like opening a book, rotating through your upper back. 8/side. Opens the rib cage and improves the thoracic rotation needed for full breath capacity \u2014 directly supports deeper inhales for sustained notes and phrases.', stretch: { name: '\u2014', desc: 'This IS the mobility work \u2014 no separate stretch needed.' } },
   'Barbell Back Squat': { desc: 'Bar on your upper back, feet shoulder-width, sit back like sitting in a chair, drive back up.', stretch: { name: 'Couch Stretch', desc: 'Back knee down (or up on a bench), front foot forward, push hips forward.' } },
   'Walking Lunges': { desc: 'Step forward into a lunge, back knee toward the floor, step through into the next rep.', stretch: { name: 'Kneeling Hip Flexor Stretch', desc: 'Kneeling lunge position, push hips forward gently.' } },
   'Standing Calf Raise': { desc: 'Rise onto your toes as high as possible, lower with control.', stretch: { name: 'Wall Calf Stretch', desc: 'Hands on a wall, one leg back with heel flat, lean forward.' } },
@@ -127,6 +134,38 @@ const EXERCISE_INFO = {
   'Dumbbell Romanian Deadlift': { desc: 'Dumbbells in front of your thighs, hinge forward with a slight knee bend until you feel your hamstrings, drive hips forward to stand.', stretch: { name: 'Standing Hamstring Stretch', desc: 'Heel on an elevated surface, leg straight, hinge forward at the hips.' } },
   'Band Row': { desc: 'Anchor a band low, pull the handles to your ribs, squeezing your back.', stretch: { name: 'Kneeling Thoracic Extension', desc: 'Kneel in front of a bench, drape your chest over it.' } },
 };
+
+// Cardio guidance shown on the Training tab, per day type.
+const CARDIO_INFO = {
+  upper: [
+    { label: 'Easy Finisher (15-20 min)', text: 'Bike or incline treadmill walk at recovery pace right after lifting \u2014 won\u2019t eat into recovery.' },
+  ],
+  lower: [
+    { label: 'If this is your interval day', text: 'Stairmaster or bike intervals \u2014 1 min hard / 1 min easy, duration scales up with your current training phase.' },
+    { label: 'If this is your long day', text: 'Long steady-state run or bike, building toward the October 10k. Duration scales with your current phase.' },
+  ],
+  full: [
+    { label: 'Easy Finisher (15-20 min)', text: 'Bike or incline treadmill walk at recovery pace right after lifting.' },
+  ],
+  home: [
+    { label: 'Intervals (no gym cardio)', text: 'Outdoor sprint intervals \u2014 30s hard / 90s walk/jog, x8-10. Or jump rope, same ratio.' },
+    { label: 'Easy/Long alternative', text: 'Brisk 15-20 min walk, or a simple bodyweight circuit \u2014 jumping jacks, mountain climbers, high knees, 30s on/30s off.' },
+  ],
+  rest: [
+    { label: 'Steady Cardio (20-30 min)', text: 'Incline walk, bike, or easy outdoor run. No lifting today, so this is the cardio-focused day \u2014 still easy effort, not all-out.' },
+  ],
+};
+
+function renderCardioInfo() {
+  const dayType = document.getElementById('train-daytype').value;
+  const blocks = CARDIO_INFO[dayType] || [];
+  document.getElementById('cardio-info').innerHTML = blocks.map(b => `
+    <div class="cardio-block">
+      <div class="cardio-label">${b.label}</div>
+      <p class="cardio-text">${b.text}</p>
+    </div>
+  `).join('');
+}
 
 const MEALS = {
   A: { desc: 'Black Bean Bowl', cal: 730, protein: 70, fat: 13, carbs: 70 },
@@ -303,7 +342,7 @@ function drawBodyChart(entries) {
     });
   }
 
-  plot(entries.map(e => e.weight), '#ff7d00');
+  plot(entries.map(e => e.weight), '#ff007f');
   plot(entries.map(e => e.bodyfat), '#295d66');
 }
 
@@ -346,24 +385,87 @@ function renderMeasurements() {
   const listEl = document.getElementById('measure-log-list');
   if (!log.length) {
     listEl.innerHTML = '<div class="log-empty">No measurements logged yet.</div>';
+  } else {
+    listEl.innerHTML = log.slice().reverse().slice(0, 10).map(e2 => {
+      const parts = [];
+      if (e2.neck) parts.push(`Neck ${e2.neck}"`);
+      if (e2.waist) parts.push(`Waist ${e2.waist}"`);
+      if (e2.chest) parts.push(`Chest ${e2.chest}"`);
+      if (e2.hips) parts.push(`Hips ${e2.hips}"`);
+      if (e2.bicep) parts.push(`Bicep ${e2.bicep}"`);
+      if (e2.thigh) parts.push(`Thigh ${e2.thigh}"`);
+      return `<div class="log-item">
+        <div class="log-item-main">
+          <span class="log-item-title">${parts.join(' · ')}</span>
+          <span class="log-item-sub">${fmtDate(e2.date)}</span>
+        </div>
+        <button class="log-item-del" data-date="${e2.date}" data-kind="measure">✕</button>
+      </div>`;
+    }).join('');
+  }
+  drawMeasurementsChart(log.slice(-30));
+}
+
+function drawMeasurementsChart(entries) {
+  const canvas = document.getElementById('chart-measure');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.parentElement.clientWidth - 32;
+  canvas.width = w; canvas.height = 180;
+  ctx.clearRect(0, 0, w, 180);
+
+  const series = [
+    { key: 'neck', color: '#ff007f' },
+    { key: 'waist', color: '#ff7d00' },
+    { key: 'chest', color: '#295d66' },
+    { key: 'hips', color: '#efe9f4' },
+    { key: 'bicep', color: '#9c9aa1' },
+    { key: 'thigh', color: '#829ca6' },
+  ];
+
+  const anyData = entries.some(e => series.some(s => e[s.key]));
+  if (entries.length < 2 || !anyData) {
+    ctx.fillStyle = '#7c7c81';
+    ctx.font = '13px Inter';
+    ctx.fillText('Log at least 2 measurement entries to see a trend.', 10, 90);
     return;
   }
-  listEl.innerHTML = log.slice().reverse().slice(0, 10).map(e2 => {
-    const parts = [];
-    if (e2.neck) parts.push(`Neck ${e2.neck}"`);
-    if (e2.waist) parts.push(`Waist ${e2.waist}"`);
-    if (e2.chest) parts.push(`Chest ${e2.chest}"`);
-    if (e2.hips) parts.push(`Hips ${e2.hips}"`);
-    if (e2.bicep) parts.push(`Bicep ${e2.bicep}"`);
-    if (e2.thigh) parts.push(`Thigh ${e2.thigh}"`);
-    return `<div class="log-item">
-      <div class="log-item-main">
-        <span class="log-item-title">${parts.join(' · ')}</span>
-        <span class="log-item-sub">${fmtDate(e2.date)}</span>
-      </div>
-      <button class="log-item-del" data-date="${e2.date}" data-kind="measure">✕</button>
-    </div>`;
-  }).join('');
+
+  const padding = 24;
+  const chartW = w - padding * 2;
+  const chartH = 180 - padding * 2;
+
+  // Shared scale across all series so they're comparable on one chart
+  const allVals = [];
+  entries.forEach(e => series.forEach(s => { if (e[s.key]) allVals.push(e[s.key]); }));
+  const min = Math.min(...allVals), max = Math.max(...allVals);
+  const range = (max - min) || 1;
+
+  series.forEach(s => {
+    const values = entries.map(e => e[s.key] || null);
+    const valid = values.filter(v => v !== null);
+    if (valid.length < 2) return;
+    ctx.beginPath();
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth = 2;
+    let started = false;
+    values.forEach((v, i) => {
+      if (v === null) return;
+      const x = padding + (i / (values.length - 1)) * chartW;
+      const y = padding + chartH - ((v - min) / range) * chartH;
+      if (!started) { ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
+    });
+    ctx.stroke();
+    values.forEach((v, i) => {
+      if (v === null) return;
+      const x = padding + (i / (values.length - 1)) * chartW;
+      const y = padding + chartH - ((v - min) / range) * chartH;
+      ctx.beginPath();
+      ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = s.color;
+      ctx.fill();
+    });
+  });
 }
 
 document.addEventListener('click', (e) => {
@@ -406,6 +508,7 @@ function addNutritionEntry(desc, cal, protein, fat, carbs) {
   all[todayStr()] = day;
   set('tpw_nutrition', all);
   renderNutrition();
+  renderToday();
 }
 
 function renderNutrition() {
@@ -461,7 +564,10 @@ document.addEventListener('click', (e) => {
 
 document.getElementById('train-date').value = todayStr();
 
-document.getElementById('train-daytype').addEventListener('change', renderExerciseList);
+document.getElementById('train-daytype').addEventListener('change', () => {
+  renderExerciseList();
+  renderCardioInfo();
+});
 document.getElementById('train-date').addEventListener('change', () => {
   loadSessionForDate(document.getElementById('train-date').value);
 });
@@ -469,6 +575,7 @@ document.getElementById('train-date').addEventListener('change', () => {
 function renderTraining() {
   loadSessionForDate(document.getElementById('train-date').value || todayStr());
   renderTrainingLog();
+  renderCardioInfo();
 }
 
 function loadSessionForDate(date) {
@@ -506,6 +613,14 @@ function renderExerciseList() {
   container.innerHTML = exercises.map(ex => {
     const savedSets = existing[ex.name] || [];
     const info = EXERCISE_INFO[ex.name];
+
+    if (ex.type === 'info') {
+      return `<div class="exercise-card" data-exercise-name="${ex.name}" data-exercise-type="${ex.type}">
+        <div class="exercise-name">${ex.name}</div>
+        ${info ? `<p class="exercise-desc">${info.desc}</p>` : ''}
+      </div>`;
+    }
+
     const last = getLastSessionBefore(date, ex.name);
     let lastHint = '';
     if (last) {

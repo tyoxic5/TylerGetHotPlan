@@ -14,14 +14,14 @@
   --text-muted: #9c9aa1;
   --text-dim: #7c7c81;
 
-  --accent-amber: #ff7d00;
-  --accent-amber-dim: #733800;
+  --accent-amber: #ff007f;
+  --accent-amber-dim: #730039;
   --accent-teal: #295d66;
   --accent-teal-dim: #173338;
-  --accent-rose: #ff007f;
-  --accent-rose-dim: #730039;
+  --accent-rose: #ff7d00;
+  --accent-rose-dim: #733800;
   --success: #295d66;
-  --danger: #ff007f;
+  --danger: #ff7d00;
 
   --radius: 10px;
   --font-display: 'Oswald', sans-serif;
@@ -522,9 +522,17 @@ textarea { resize: vertical; margin-bottom: 10px; font-family: var(--font-body);
 /* ============ CHART ============ */
 
 .chart-legend { display: flex; gap: 16px; margin-top: 8px; font-size: 12px; color: var(--text-muted); }
+.chart-legend-wrap { flex-wrap: wrap; gap: 10px 14px; }
 .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
 .dot.accent-amber { background: var(--accent-amber); }
 .dot.accent-teal { background: var(--accent-teal); }
+
+/* ============ CARDIO INFO ============ */
+
+.cardio-block { margin-bottom: 10px; }
+.cardio-block:last-child { margin-bottom: 0; }
+.cardio-label { font-size: 12px; font-weight: 600; color: var(--accent-teal); margin-bottom: 3px; }
+.cardio-text { font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0; }
 
 /* ============ SNACKS & RECIPES ============ */
 

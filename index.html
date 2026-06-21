@@ -110,6 +110,15 @@
 
       </div>
 
+      <div class="panel">
+        <div class="panel-label">QUICK ADD — TODAY'S MEALS</div>
+        <div class="quickadd-grid">
+          <button class="quickadd-btn" data-meal="A">Black Bean Bowl<br><span class="qa-sub">730 cal · 70p</span></button>
+          <button class="quickadd-btn" data-meal="B">Lemon Broccoli Chicken<br><span class="qa-sub">700 cal · 70p</span></button>
+          <button class="quickadd-btn" data-meal="S">Daily Smoothie<br><span class="qa-sub">470 cal · 35p</span></button>
+        </div>
+      </div>
+
       <div class="quick-actions">
         <button class="qa-btn" data-goto="nutrition">+ Log Meal</button>
         <button class="qa-btn" data-goto="body">+ Log Weigh-in</button>
@@ -188,6 +197,19 @@
         </div>
         <button class="btn-primary" id="btn-save-measure">Save Measurements</button>
         <div class="log-list" id="measure-log-list" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">MEASUREMENTS TREND</div>
+        <canvas id="chart-measure" height="180"></canvas>
+        <div class="chart-legend chart-legend-wrap">
+          <span><i class="dot" style="background:#ff007f"></i> Neck</span>
+          <span><i class="dot" style="background:#ff7d00"></i> Waist</span>
+          <span><i class="dot" style="background:#295d66"></i> Chest</span>
+          <span><i class="dot" style="background:#efe9f4"></i> Hips</span>
+          <span><i class="dot" style="background:#9c9aa1"></i> Bicep</span>
+          <span><i class="dot" style="background:#829ca6"></i> Thigh</span>
+        </div>
       </div>
 
       <div class="panel">
@@ -310,6 +332,11 @@
             </select>
           </label>
         </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">CARDIO TODAY</div>
+        <div id="cardio-info"></div>
       </div>
 
       <div class="panel">
