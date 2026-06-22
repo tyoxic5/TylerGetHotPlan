@@ -1,0 +1,14 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="512" height="512" rx="100" fill="#36393b"/>
+
+  <!-- One continuous shape: left leg + bottom curve in pink (reads as L),
+       right leg in orange, the whole thing reading as U.
+       Generous margin from every edge (~29-31% sides/top) to stay
+       safely clear of any OS icon mask/crop. -->
+  <path d="M190,180 L190,320 A67,67 0 0 0 324,320"
+        fill="none" stroke="#ff007f" stroke-width="64"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M324,320 L324,180"
+        fill="none" stroke="#ff7d00" stroke-width="64"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
